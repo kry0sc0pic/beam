@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { EncryptionService } from '$lib/utils/encryption';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
@@ -17,17 +16,10 @@
 
         try {
             const file = files[0];
-            const arrayBuffer = await file.arrayBuffer();
-            
-            // Encrypt the file
-            const encryptedData = await EncryptionService.encrypt(arrayBuffer);
             
             // Create form data
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('encryptedData', encryptedData.encryptedData);
-            formData.append('iv', encryptedData.iv);
-            formData.append('key', encryptedData.key);
 
             // Upload to server
             const response = await fetch('/api/upload', {
