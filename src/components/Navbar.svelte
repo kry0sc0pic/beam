@@ -8,6 +8,7 @@
     <div class="spacer"></div>
     <!-- <Link to="/" class="logo-link"> -->
       <BeamLogo />
+      
     <!-- </Link> -->
     <div class="spacer"></div>
   </div>

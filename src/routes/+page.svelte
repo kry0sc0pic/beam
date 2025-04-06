@@ -134,8 +134,8 @@
     </div>
     <canvas bind:this={canvas} class="hero-canvas"></canvas>
     <div class="hero-content">
-      <h1>Secure File Transfer<br />Without the Risk</h1>
-      <p>Send files from any computer without risking your accounts getting hacked.</p>
+      <h1><span class="cyan">Secure</span> File Transfer<br />Without the <span class="magenta">Risk</span></h1>
+      <p>Send files from any insecure computer without <span class="yellow">compromising your credentials.</span></p>
       <button class="cta-button coming-soon" disabled>
         Coming Soon
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
