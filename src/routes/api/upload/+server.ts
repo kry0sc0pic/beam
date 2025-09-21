@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { Resend } from 'resend';
 import { authenticator } from 'otplib';
 import type { RequestHandler } from './$types';
-import { VITE_RESEND_API_KEY, VITE_TOTP_SECRET, VITE_TARGET_EMAIL } from '$env/static/private';
+import { VITE_RESEND_API_KEY, VITE_TOTP_SECRET, VITE_PERSONA_EMAIL, VITE_UNI_EMAIL } from '$env/static/private';
 
 const resend = new Resend(VITE_RESEND_API_KEY);
 const secret = VITE_TOTP_SECRET;
@@ -12,12 +12,20 @@ export const POST: RequestHandler = async ({ request }) => {
     console.log('Processing upload request...');
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];
-    const targetEmail = VITE_TARGET_EMAIL;
+    const category = formData.get('category') as string;
 
     if (!files || files.length === 0) {
       console.log('No files provided');
       return json({ error: 'No files provided' }, { status: 400 });
     }
+
+    if (!category || !['Persona', 'Uni'].includes(category)) {
+      console.log('Invalid or missing category');
+      return json({ error: 'Invalid category. Must be either "Persona" or "Uni"' }, { status: 400 });
+    }
+
+    // Determine target email based on category
+    const targetEmail = category === 'Persona' ? VITE_PERSONA_EMAIL : VITE_UNI_EMAIL;
 
     // Verify TOTP code
     console.log('Verifying TOTP code...');
@@ -52,10 +60,10 @@ export const POST: RequestHandler = async ({ request }) => {
     const r = await resend.emails.send({
       from: 'Beam <beam@krishaay.dev>',
       to: targetEmail,
-      subject: `[BEAM] New files received (${files.length} files)`,
+      subject: `[BEAM - ${category}] New files received (${files.length} files)`,
       html: `
-        <h1>New Files Received</h1>
-        <p>You have received ${files.length} new file(s) via Beam:</p>
+        <h1>New Files Received - ${category} Category</h1>
+        <p>You have received ${files.length} new file(s) via Beam in the <strong>${category}</strong> category:</p>
         <ul>
           ${files.map(file => `
             <li>${file.name} (${formatFileSize(file.size)})</li>

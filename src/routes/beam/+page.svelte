@@ -7,6 +7,7 @@
     let error = '';
     let success = '';
     let totpCode = '';
+    let selectedCategory = 'Persona';
   
     const handleSubmit = () => {
       showDialog = true;
@@ -40,6 +41,7 @@
   
         const formData = new FormData();
         formData.append('code', totpCode);
+        formData.append('category', selectedCategory);
         selectedFiles.forEach(file => {
           formData.append('files', file);
         });
@@ -78,6 +80,20 @@
         <div class="error">{error}</div>
       {/if}
       <form on:submit|preventDefault={handleSubmit}>
+        <div class="form-group">
+          <label for="category">Select Category</label>
+          <div class="category-selection">
+            <label class="radio-option">
+              <input type="radio" bind:group={selectedCategory} value="Persona" />
+              <span class="radio-text">Persona</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" bind:group={selectedCategory} value="Uni" />
+              <span class="radio-text">Uni</span>
+            </label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="files">Select Files</label>
           <div class="file-input-container">
@@ -186,6 +202,53 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       opacity: 0.8;
+    }
+
+    .category-selection {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .radio-option:hover {
+      border-color: var(--primary-color);
+      background: var(--hover-color);
+    }
+
+    .radio-option input[type="radio"] {
+      margin: 0;
+      width: 16px;
+      height: 16px;
+    }
+
+    .radio-option input[type="radio"]:checked + .radio-text {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .radio-option:has(input[type="radio"]:checked) {
+      border-color: var(--primary-color);
+      background: rgba(var(--primary-color-rgb, 0, 255, 255), 0.1);
+    }
+
+    .radio-text {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
     }
   
     .file-input-container {
